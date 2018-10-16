@@ -30,3 +30,6 @@ Following things should be completed to make this software helpful and realistc 
 - Expanding the database so it supports more poisons and treatments.
 - Develop the system for expanding the system so it's easier to generate the desired format of data.
 - Adjust the system so it might also handle diseases/symptoms/disorders/damages ...etc instead of just poisons.
+
+## Detailed Report
+You can find more information about this software by checking [Report](Report.pdf)
