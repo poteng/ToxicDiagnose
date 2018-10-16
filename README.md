@@ -7,6 +7,20 @@ The motivation of this project is to develope an expert system used for emergenc
 ## Data Format
 The data of symptoms and treatments of poisons is stored in [statement.txt](statement.txt).
 
+## Sample Run
+A good test case is to input the symptoms of **Colchicine**.
+
+By inputing following inputs in order:
+
+`No No Yes No No No Yes Yes` 
+
+The software will use backward chaining to get the conclusion. Based on the conclusion, the software will then use forward chaining to find the appropriate treatment.
+
+You will see the following sentences:
+```
+Recommended Treatment(s):
+Adminster charcoal as slurry. Begin IV fluids. Gastric lavage within one hour of ingestion.
+```
 
 ## Future improvement (todo)
 Following things should be completed to make this software helpful and realistc enough to be a real world solution.
