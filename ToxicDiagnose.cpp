@@ -1,6 +1,4 @@
 #include <utility>
-
-
 #include <cstdlib>
 #include <iostream>
 #include <cstring>
@@ -9,9 +7,6 @@
 #include <fstream>
 
 using namespace std;
-
-
-
 
 struct Variable
 {
@@ -60,13 +55,6 @@ string get_conclusion(const string &, Conclusion*, Question*, Variable*, int, in
 
 string backward_chaining();
 
-
-
-
-
-//=======================================
-
-void IdentifyPoison();
 void Treatment();
 void InitializeList2();
 void Instantiate(const string &question, string &value, bool &instantiate);
@@ -74,11 +62,8 @@ void ExecRule(int rule_num);
 void forward_chaining(string);
 
 
-
-
 struct Variable_f
 {
-    int number{};
     string name;
     string value;
     string question;
@@ -94,9 +79,7 @@ Variable_f clausevarlist[clausevarlist_size];
 Variable_f varlist2[varlist2_size];
 Variable_f clausevarlist2[clausevarlist2_size];
 
-int conc_counter = 0,
-    clause_counter = 0,
-    clause_pointer = 0;
+int clause_pointer = 0;
 
 Variable_f treatment;
 
@@ -127,11 +110,10 @@ int main()
 
     cout << "Enable additional messages for showing data structure? (not recommended for normal use) (Y/N)";
     cin >> inputUser;
-    if (inputUser == "Y") testmsg = true;
+    if (inputUser == "Y" || inputUser == "y") testmsg = true;
 
     do
     {
-
         result = backward_chaining();
 
         if (result != "wrong")
@@ -140,11 +122,10 @@ int main()
         }
         cout << "Would you like to try another search? ";
         cin >> inputUser;
-    } while (inputUser == "Yes");
+    } while (inputUser == "Yes" || inputUser == "Y" || inputUser == "yes" || inputUser == "y" );
     cout << "\n\nProgram ends. Thanks for using.\n";
     return 0;
 }
-
 
 string backward_chaining()
 {
@@ -182,7 +163,6 @@ string backward_chaining()
             return "wrong";
     }
 
-
     build_clause_list(knowledgeFile, clause_list, conclusion_list, num_clause_per_statement);
     num_variable_real = build_variable_list(variable_list, clause_list, num_statement * num_clause_per_statement,
                                             conclusion_list, num_statement);
@@ -190,7 +170,6 @@ string backward_chaining()
     if (testmsg) display_clauseList(clause_list, num_statement * num_clause_per_statement);
     if (testmsg) display_variable_list(variable_list, num_variable_real);
     if (testmsg) display_conclusion_list(conclusion_list, num_statement);
-
 
     //get conclusion from the user
     cout << "Press 1 to find a poison, or enter a conclusion to find:  ";
@@ -211,8 +190,6 @@ string backward_chaining()
 
     return result;
 }
-
-
 
 bool openKnowledgeBaseFile(fstream& file, const char* name)
 {
@@ -283,8 +260,6 @@ void build_clause_list(fstream& file, Question* listQuestion, Conclusion* listCo
     }
 }
 
-
-
 void display_variable_list(Variable* variable_list, int sizeVariable)
 {
     cout << "\nPrinting variable list:" << endl;
@@ -293,7 +268,6 @@ void display_variable_list(Variable* variable_list, int sizeVariable)
         cout << variable_list[i].name << " = " << variable_list[i].value << endl;
     }
 };
-
 
 //return the index of conclusion if the given variable name is one of conclusions
 //otherwise, return -1
@@ -305,7 +279,6 @@ int check_conclusion (const string &nameConclusion, Conclusion* listConclusion, 
     }
     return -1;
 }
-
 
 //It build the variable list based on clause variable list.
 int build_variable_list(Variable* listVariable, Question* listClause, int sizeClause,
@@ -339,7 +312,6 @@ int build_variable_list(Variable* listVariable, Question* listClause, int sizeCl
     return sizeVariableReal;
 }
 
-
 //check the given variable is initiated or not, and ask the user if not
 //return the index of that variable for following use
 int check_variable(const string &nameVariable, Variable* listVariable, int sizeVariable)
@@ -351,8 +323,16 @@ int check_variable(const string &nameVariable, Variable* listVariable, int sizeV
             if (!listVariable[i].instantiate)
             {
                 cout << "\nDoes the patient have \"" << listVariable[i].name << "\"? (Yes/No)" << endl;
-                ///////////////////need to deal with input
-                cin >> listVariable[i].value;
+
+                //deal with input
+                string UserInput;
+                cin >> UserInput;
+                if (UserInput == "Yes" || UserInput == "yes" || UserInput == "Y" || UserInput == "y"){
+                    listVariable[i].value = "Yes";
+                } else {
+                    listVariable[i].value = "No";
+                }
+
                 listVariable[i].instantiate = true;
             }
             return i;
@@ -367,7 +347,6 @@ bool check_stop_path(Variable* listVariable, int indexVariable, Question* listCl
     return listVariable[indexVariable].value != listClause[indexClause].value1;
 }
 
-
 //try to get the value of given conclusion
 string get_conclusion(const string &conclusion, Conclusion* listConclusion, Question* listClause,
                        Variable* listVariable, int sizeConclusion, int clausePerStatement, int sizeVariable)
@@ -377,7 +356,6 @@ string get_conclusion(const string &conclusion, Conclusion* listConclusion, Ques
     //if the answer from the user is already against the current rule, stop it.
 
     if (testmsg) cout << "Trying to get conclusion: " << conclusion << endl;
-
 
     //search conclusion to find which clause has it
     //num_statement is the size of conclusion list
@@ -392,7 +370,6 @@ string get_conclusion(const string &conclusion, Conclusion* listConclusion, Ques
             {
                 return "No Match";
             }
-
             else //examine this one conclusion and see if we can get the possible answer
             {
                 //Find clause which can generate the variable/conclusion the last clause need
@@ -456,13 +433,6 @@ string get_conclusion(const string &conclusion, Conclusion* listConclusion, Ques
     return "No match";
 }
 
-
-
-
-//====================================================
-
-
-
 void forward_chaining(string valuePoison)
 {
     Variable_f Empty;
@@ -490,7 +460,6 @@ void forward_chaining(string valuePoison)
 
     Treatment();
 }
-
 
 void Treatment()
 {
@@ -526,7 +495,6 @@ void Treatment()
 
 void InitializeList2()
 {
-
     cout << "*** Variable List *" << endl;
     for (int i = 0; i < varlist2_size; i++)
     {
@@ -535,7 +503,6 @@ void InitializeList2()
     cout << "HIT RETURN KEY TO CONTINUE";
     cin.get();
     cout << endl;
-
 
     cout << "*** Clause Variable List *" << endl;
     for(int i = 0; i < statement2_size ; i++)
